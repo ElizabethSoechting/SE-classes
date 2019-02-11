@@ -1,0 +1,210 @@
+Script started on Tue 09 Oct 2018 08:58:09 PM MST
+[01;34m#=======================================================================#
+[1;36m                  Embry Riddle Aeronautical University         
+[01;34m#=======================================================================#
+[01;37m  HOSTNAME =[1;36m prclab1.erau.edu  
+[01;37m  LOCATION =[01;32m Prescott                      
+[01;37m  USER     =[01;35m soechtie                      
+[01;37m  UPTIME   =[01;33m 19 days, 16:03, 29 users, load average hours,  5.04, 4.94, 4.87 minutes  
+[01;37m  ens192   = [2;36m172.19.241.11  
+[01;37m  OS       = [01;31mRed Hat Enterprise Linux Server release 7.5 (Maipo)  
+[01;37m  ARCH     = x86_64                     
+[01;37m  KERNEL   = 3.10.0-862.11.6.el7.x86_64                   
+[01;37m  Date     = Tue Oct  9 20:58:09 MST 2018                   
+[01;34m  CPUCORES = 6 [01;34m                                     CPU_AVG  = 89%
+[021;32m  MEMORY (total) = 7804 Mb     [01;32m                      MEM_AVG  = 6%
+[021;32m  SWAP (total)   = 4091 Mb [01;32m                         SWAP_AVG = 19%  
+[01;34m#=======================================================================#[0m
+
+ATTENTION: ALL PREVIOUS USERS
+PRCLAB has been re-imaged for the Fall 2018 semester. If you require access to 
+data from a prior semester, please submit a support request to I.T. using the steps
+outlined in KB-899.
+
+]0;soechtie@prclab1:~/CS420[?1034h[soechtie@prclab1 CS420]$ cat PThread1.c
+// Elizabeth Soechting
+// CS 420 Hw 2
+// Version 1
+// Due: October 9
+// Compile with -lpthread
+
+#include <pthread.h>
+pthread_t pthread_self(void);
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+
+void *myThreadFcn(void *var)
+{
+ printf("\n\rHello I am thread 2, PID: %l, TID: %lu \n\r", getppid(), pthread_self());
+}
+
+int main()
+{
+ pid_t PID;
+ pthread_t TID;
+ 
+ // Error Handling
+ int errCode;	// this stores the errorno; 0 if successful, 1 if failed
+ char *str; 	// this gives us the char value of the errCode
+ str = strerror(EINVAL);	// EINVAL is an invalid argument character
+
+ // print out in main
+ printf("\n\rMain Thread, PID: %lu, TID: %lu \n\r", getpid(), pthread_self());
+ 		 
+ // errCode stores the value returned by pthread_create
+ errCode = pthread_create(&TID, NULL, myThreadFcn, NULL);	
+ if(errCode != 0)
+ {
+  printf("\n\rError %s \n\r", strerror(errCode));
+ }
+
+  printf("\n\rMain has succussfully created a second thread with TID: %lu \n\r", TID);
+ 
+}
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ gcc -lpthread PThread1.c
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ a.out
+
+Main Thread, PID: 99288, TID: 140056010602304 
+
+Main has succussfully created a second thread with TID: 140056002254592 
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ cat T[KPThread.c
+// Elizabeth Soechting
+// CS 420 Hw 2 
+// Version 2
+// Due: Oct9, 2018
+// Compile with -lpthread
+
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+
+// starting function for thread
+void *myThreadFcn(void *var)
+{
+ printf("\n\tHello I'm the second thread, my TID is %lu and I'm still in Process:%lu \n\r", pthread_self(), getpid());
+ return NULL;  
+}
+
+int main()
+{
+ pid_t PID;
+ pthread_t TID; 
+
+ // Error Handling
+ int errCode;	// this stores the errorno; 0 if successful, 1 if failed
+ char *str; 	// this gives us the char value of the errCode
+ str = strerror(EINVAL);	// EINVAL is an invalid argument character
+ 
+ /* Prints the main fcn pid & tid */
+ printf("\n\rI am Main Thread 1. PID: %lu , TID: %lu \n\r",getpid(), pthread_self());
+
+ /* Making the new Thread and Error handling */
+ errCode = pthread_create(&TID, NULL, myThreadFcn, NULL);	// Stores the value returned by errno	
+ if(errCode != 0)
+ {
+  printf("\n\rError %s \n\r", strerror(errCode));
+ }
+ 
+ /* Prints out that new thread was created */
+ printf("\n\rMain has succussfully created a second thread with TID: %lu \n\r", TID);
+ 
+ errCode = pthread_join(TID, NULL);	// errCode will store the value returned by pthread_join
+ if(errCode != 0)
+ {
+  printf("\n\rError %s \n\r", strerror(errCode));	
+ }
+ 
+ /**** After Thread ****/
+
+ printf("\n\rMain: Second thread has terminated, main will now exit.\n\r"); 
+
+}
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ gcc -lpthread PThread.c
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ a.a[Kout
+
+I am Main Thread 1. PID: 99706 , TID: 139655982065472 
+
+Main has succussfully created a second thread with TID: 139655973717760 
+
+	Hello I'm the second thread, my TID is 139655973717760 and I'm still in Process:99706 
+
+Main: Second thread has terminated, main will now exit.
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ cat PThread3.c
+// Elizabeth Soechting
+// CS 420 Hw 2 
+// Pthreads Version 3
+// Due: October 9
+// Compile with -lpthread
+
+#include <unistd.h> 
+#include <pthread.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <string.h>
+#include <stdio.h>
+pthread_t pthread_self(void);
+
+void *myThreadFcn(void *var)
+{
+ printf("\n\tI am thread2 TID: %lu PID: %lu,\n\t\t I recieved a '%c' when I was created.\n\r", pthread_self(), getpid(), *((char*)var));
+ return NULL;
+}
+
+int main()
+{
+ pid_t PID;
+ pthread_t TID;
+ char b = 'b';
+ 
+ /* Error handling */
+ int errCode;	// stores the errno; 0 if successful, 1 if failed
+ char * str;	// gives us the char value of the errCode
+ str = strerror(EINVAL);	// EINVAL is an invalid argument char
+
+ /* Prints the main fcn pid & tid */
+ printf("\n\rI am main thread1 PID: %lu, TID: %lu \n\r", getpid(), pthread_self());
+
+ /**** Before Thread ****/
+
+ /* Making the new Thread & Error handling */
+ errCode = pthread_create(&TID, NULL, myThreadFcn, &b);	// stores the evalue returned by pthread_create
+ if(errCode != 0)
+ {
+  printf("\n\rError %s \n\r", strerror(errCode));
+ } 
+
+ /* prints that a new thread was created */
+ printf("\n\rMain has successfully created a new thread with TID: %lu \n\r", TID);
+
+ errCode = pthread_join(TID, NULL);	// errCode stores the value returned by pthread_join
+ if(errCode != 0)
+ {
+  printf("\n\rError %s \n\r", strerror(errCode));
+ } 
+
+ /**** After Thread ****/
+
+ printf("\n\rMain: Second thread had terminated, main will now exit.\n\r");
+ 
+} 
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ gcc -lpthread PThread3.c
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ a.out
+
+I am main thread1 PID: 100212, TID: 140194805540672 
+
+Main has successfully created a new thread with TID: 140194797192960 
+
+	I am thread2 TID: 140194797192960 PID: 100212,
+		 I recieved a 'b' when I was created.
+
+Main: Second thread had terminated, main will now exit.
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ exit
+exit
+
+Script done on Tue 09 Oct 2018 08:59:37 PM MST

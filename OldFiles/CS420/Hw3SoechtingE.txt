@@ -1,0 +1,96 @@
+Script started on Thu 18 Oct 2018 01:27:45 PM MST
+[01;34m#=======================================================================#
+[1;36m                  Embry Riddle Aeronautical University         
+[01;34m#=======================================================================#
+[01;37m  HOSTNAME =[1;36m prclab1.erau.edu  
+[01;37m  LOCATION =[01;32m Prescott                      
+[01;37m  USER     =[01;35m soechtie                      
+[01;37m  UPTIME   =[01;33m 28 days, 8 hours, 33, 11 users minutes  
+[01;37m  ens192   = [2;36m172.19.241.11  
+[01;37m  OS       = [01;31mRed Hat Enterprise Linux Server release 7.5 (Maipo)  
+[01;37m  ARCH     = x86_64                     
+[01;37m  KERNEL   = 3.10.0-862.11.6.el7.x86_64                   
+[01;37m  Date     = Thu Oct 18 13:27:45 MST 2018                   
+[01;34m  CPUCORES = 6 [01;34m                                     CPU_AVG  = 0%
+[021;32m  MEMORY (total) = 7804 Mb     [01;32m                      MEM_AVG  = 7%
+[021;32m  SWAP (total)   = 4091 Mb [01;32m                         SWAP_AVG = 16%  
+[01;34m#=======================================================================#[0m
+
+ATTENTION: ALL PREVIOUS USERS
+PRCLAB has been re-imaged for the Fall 2018 semester. If you require access to 
+data from a prior semester, please submit a support request to I.T. using the steps
+outlined in KB-899.
+
+]0;soechtie@prclab1:~/CS420[?1034h[soechtie@prclab1 CS420]$ cat hw3SoechtingE.c 
+// Elizabeth Soechting
+// CS 420 Hw 3
+// Due: October 19
+// Compile with -lpthread
+
+#include <pthread.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+
+/* Global Variable */
+int var = 0;
+
+void *myThreadFcn(void *args)
+{
+ printf("\n\tSecond Thread: TID: %lu still in process: %lu\n\r", pthread_self(), getpid());
+ printf("\n\t\tSecond Thread: I'm going to spin until Main enters a non-zero value into the global variable.\n\r");
+ while(var == 0);	// Infinite loop - spinning
+ printf("\n\tSecond Thread: Main set the global to %d . I'm going to reset it to zero then I'm done. \n\r", var);
+ var = 0;
+
+ return NULL;
+}
+
+int main()
+{
+ pid_t PID;
+ pthread_t TID;
+ 
+ // Error Handling
+ int errCode;	// this stores the errorno; 0 if successful, 1 if failed 		 
+ // errCode stores the value returned by pthread_create
+ errCode = pthread_create(&TID, NULL, myThreadFcn, NULL);	
+ if(errCode != 0)
+ {
+  printf("\n\rError %s \n\r", strerror(errCode));
+ }
+ 
+ // print out in main
+ printf("\n\rMain Thread, PID: %lu \n\r", getpid());
+ printf("\n\rMain: Successfully created a new thread TID: %lu \n\r", pthread_self());
+ printf("\n\rEnter a non-zero value so the other thread can stop spinning.\n\r");
+ scanf("%d", &var);
+ 
+ while(var != 0);
+ 
+ printf("\n\rMain: The Second Thread reset the global variable to zero so I'm done. \n\r");
+
+}
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ gcc -lpthread hw3SoechtingE.c 
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ a.out
+
+Main Thread, PID: 32251 
+
+Main: Successfully created a new thread TID: 139742450599744 
+
+Enter a non-zero value so the other thread can stop spinning.
+
+	Second Thread: TID: 139742442252032 still in process: 32251
+
+		Second Thread: I'm going to spin until Main enters a non-zero value into the global variable.
+56
+
+	Second Thread: Main set the global to 56 . I'm going to reset it to zero then I'm done. 
+
+Main: The Second Thread reset the global variable to zero so I'm done. 
+]0;soechtie@prclab1:~/CS420[soechtie@prclab1 CS420]$ exit
+exit
+
+Script done on Thu 18 Oct 2018 01:28:21 PM MST

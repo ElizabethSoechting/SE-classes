@@ -1,0 +1,27 @@
+Script started on Tue 09 Oct 2018 08:57:41 PM MST
+[01;34m#=======================================================================#
+[1;36m                  Embry Riddle Aeronautical University         
+[01;34m#=======================================================================#
+[01;37m  HOSTNAME =[1;36m prclab1.erau.edu  
+[01;37m  LOCATION =[01;32m Prescott                      
+[01;37m  USER     =[01;35m soechtie                      
+[01;37m  UPTIME   =[01;33m 19 days, 16:02, 29 users, load average hours,  4.90, 4.91, 4.86 minutes  
+[01;37m  ens192   = [2;36m172.19.241.11  
+[01;37m  OS       = [01;31mRed Hat Enterprise Linux Server release 7.5 (Maipo)  
+[01;37m  ARCH     = x86_64                     
+[01;37m  KERNEL   = 3.10.0-862.11.6.el7.x86_64                   
+[01;37m  Date     = Tue Oct  9 20:57:41 MST 2018                   
+[01;34m  CPUCORES = 6 [01;34m                                     CPU_AVG  = 83%
+[021;32m  MEMORY (total) = 7804 Mb     [01;32m                      MEM_AVG  = 6%
+[021;32m  SWAP (total)   = 4091 Mb [01;32m                         SWAP_AVG = 19%  
+[01;34m#=======================================================================#[0m
+
+ATTENTION: ALL PREVIOUS USERS
+PRCLAB has been re-imaged for the Fall 2018 semester. If you require access to 
+data from a prior semester, please submit a support request to I.T. using the steps
+outlined in KB-899.
+
+]0;soechtie@prclab1:~/CS420[?1034h[soechtie@prclab1 CS420]$ exit
+exit
+
+Script done on Tue 09 Oct 2018 08:57:45 PM MST

@@ -1,0 +1,43 @@
+// Elizabeth Soechting
+// CS 420 Hw 2 
+// Version 2
+// Due: Oct9, 2018
+// Compile with -lpthread
+
+#include <stdio.h>
+#include <pthread.h>
+pthread_t pthread_self(void);
+int pthread_join(pthread_t, void **retval);
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+
+// starting function for thread
+void *myThreadFcn(void *var)
+{
+ printf("\n\rHello I'm the second thread, my TID is %d and I'm still in Process:%d \n\r", pthread_self(), getpid());
+ return NULL;  
+}
+
+int main()
+{
+ pid_t PID;
+ pthread_t TID; 
+
+ // Error Handling Code
+ int errCode;                                                     
+ // Starts off by stating the function we are currently in and prints out the procces ID and thread ID
+ printf("\n\rI am Main Thread 1. PID: %lu , TID: %lu \n\r",getpid(), pthread_self());
+ 
+ // check if main has successfully created a thread
+ if(TID > 0)
+ {
+  printf("\n\rMain sucessfully created a new thread with TID: %lu \n\r", pthread_self());
+ }
+ //before thread
+ pthread_create(&TID, NULL, myThreadFcn, NULL);
+ pthread_join(TID, NULL);
+ //after thread
+ printf("\n\rMain: Second thread has terminated, main will now exit.\n\r"); 
+}
